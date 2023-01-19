@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+}
+
+.cat {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url('../img/cat.gif');
+  background-size: contain;
+}
+
+.left {
+  transform: scaleX(-1);
+}
+
+
+.right {
+  transform: scaleX(1);
+}
