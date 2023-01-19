@@ -12,14 +12,16 @@ requestAnimationFrame(gameLoop);
 class Cat {
   constructor() {
     this.el = document.querySelector('.cat');
-    this.direction = 'right';
     this.size = 100;
     this.speed = 1;
     this.x = 0;
     this.y = 0;
     this.targetX = 0;
     this.acceleration = 0.01;
+    this.friction = 0.02;
     this.time = 0;
+    this.isMoving = false;
+    this.vectorX = 1;
   }
 
   render() {
@@ -29,35 +31,42 @@ class Cat {
     this.el.style.height = `${this.size}px`;
     this.el.style['margin-left'] = `-${this.size / 2}px`;
 
-    switch(this.direction) {
-      case 'left':
+    switch(this.vectorX) {
+      case -1:
         this.el.classList.remove('right');
         this.el.classList.add('left');
         break;
-      case 'right':
+      case 1:
         this.el.classList.remove('left');
         this.el.classList.add('right');
         break;
     }
   }
 
-  move() {
-    const direction = Math.sign(this.targetX - this.x);
-    const targetDelta = Math.abs(this.targetX - this.x);
+  speedUp() {
+    this.speed += this.acceleration * this.time;
+    this.x = this.x + this.speed * this.vectorX;
+  }
 
-    if (direction === -1) {
-      this.direction = 'left';
-    } else if (direction === 1) {
-      this.direction = 'right';
+  slowDown() {
+    this.isMoving = false;
+    this.speed -= this.friction * this.time;
+
+    if (this.speed < 0) {
+      this.speed = 0;
     }
 
-    if (targetDelta >= this.speed) {
-      this.time += 0.1;
-      this.speed += this.acceleration * this.time;
-      this.x = this.x + this.speed * direction;
+    this.x = this.x + this.speed * this.vectorX;
+  }
+
+  move() {
+    const targetDelta = Math.abs(this.targetX - this.x);
+    this.time += 0.1;
+
+    if (targetDelta >= this.speed && this.isMoving) {
+      this.speedUp();
     } else {
-      this.speed = 1;
-      this.x = this.x + targetDelta * direction;
+      this.slowDown();
     }
 
     this.render();
@@ -70,6 +79,16 @@ const cat = new Cat();
 
 
 document.addEventListener('click', (event) => {
+  // if (cat.speed) {
+  //   cat.slowDown()
+  // }
+
+  if (cat.isMoving) {
+    return
+  }
+
+  cat.isMoving = true;
   cat.time = 0;
   cat.targetX = event.clientX;
+  cat.vectorX = Math.sign(cat.targetX - cat.x);
 });
