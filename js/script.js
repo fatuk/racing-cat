@@ -8,17 +8,18 @@ function gameLoop() {
 
 requestAnimationFrame(gameLoop);
 
-// s= v0*t + a * t^2 / 2
 
 class Cat {
   constructor() {
     this.el = document.querySelector('.cat');
     this.direction = 'right';
     this.size = 100;
-    this.speed = 3;
+    this.speed = 1;
     this.x = 0;
     this.y = 0;
     this.targetX = 0;
+    this.acceleration = 0.01;
+    this.time = 0;
   }
 
   render() {
@@ -51,8 +52,11 @@ class Cat {
     }
 
     if (targetDelta >= this.speed) {
+      this.time += 0.1;
+      this.speed += this.acceleration * this.time;
       this.x = this.x + this.speed * direction;
     } else {
+      this.speed = 1;
       this.x = this.x + targetDelta * direction;
     }
 
@@ -66,5 +70,6 @@ const cat = new Cat();
 
 
 document.addEventListener('click', (event) => {
+  cat.time = 0;
   cat.targetX = event.clientX;
-})
+});
