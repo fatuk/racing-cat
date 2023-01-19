@@ -18,3 +18,18 @@ body {
 .right {
   transform: scaleX(1);
 }
+
+.arrow {
+  position: absolute;
+  left: 400px;
+  top: 200px;
+  width: 20px;
+  height: 100px;
+  background: orange;
+}
+.arrow:after {
+  content: '^';
+  display: inline-block;
+  font-size: 40px;
+  margin-top: -40px;
+}
