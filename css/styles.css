@@ -10,6 +10,17 @@ body {
   background-size: contain;
 }
 
+.mouse {
+  width: 35px;
+  height: 25px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url('../img/mouse.png');
+  background-size: contain;
+  display: none;
+}
+
 .left {
   transform: scaleX(-1);
 }
